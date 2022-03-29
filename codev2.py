@@ -9,9 +9,9 @@ Created on Mon Mar 28 21:14:59 2022
 import pygame 
 import sys 
 
-
+# Width must be a multiple of rows as you cant have half a box
 WIDTH = 800
-ROWS = 50
+ROWS = 80
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
 
 WHITE = (255, 255, 255)
@@ -40,16 +40,16 @@ def create_grid():
     
     
     for i in range(ROWS):
-        
+        grid.append([])
         for j in range(ROWS):
             
-           box = Box(j, i, box_width)
-           grid.append([box])
+           box = Box(i, j, box_width)
+           grid[i].append(box)
    
     return grid
 
 def draw_grid_lines():
-    box_width = WIDTH/ROWS
+    box_width = WIDTH//ROWS
     
     for i in range(ROWS):
         pygame.draw.line(WINDOW, BLACK, (0, i * box_width), (WIDTH, i * box_width))
@@ -58,16 +58,127 @@ def draw_grid_lines():
         pygame.draw.line(WINDOW, BLACK , (j * box_width, 0), (j * box_width, WIDTH))  
     
 
-def draw_grid():
-    grid = create_grid()
+def draw_grid(grid):
+    
     for row in grid:
         for point in row:
             point.draw_boxes(WINDOW)
     draw_grid_lines()        
     pygame.display.update()
     
-def main():
+
+def box_locator(position):
+    x,y = position 
+    
+    z = WIDTH/ROWS #Need to rename this variable 
+    
+    row_no = x //z
+    col_no = y //z
+    
+    return row_no, col_no
+
+
+
+def update_display(grid):
+    
+    for row in grid:
+
+        for spot in row:
+            spot.draw_boxes(WINDOW)
+
     draw_grid()
+
+    pygame.display.update()
+
+def infect(grid):
+    pygame.time.delay(2000)
+    x = ROWS//2
+    y = ROWS//2
+    grid[x][y].colour = RED
+    
+    return grid
+
+
+
+
+
+def neighbours(grid, i, j):
+    neighbours = 0
+    
+    
+    if i >=1 and j>= 1:
+        if grid[i-1][j-1].colour == RED:
+            neighbours += 1
+    
+    if i >= 1:
+        if grid[i-1][j].colour == RED:
+            neighbours += 1
+    
+    if i >= 1 and j < ROWS-1:
+        if grid[i-1][j+1].colour == RED:
+            neighbours += 1
+    
+    if j >= 1:
+        if grid[i][j-1].colour == RED:
+            neighbours += 1
+        
+    
+    if grid[i][j].colour == RED:
+        neighbours += 1
+        
+    if j < ROWS-1:
+        
+        if grid[i][j+1].colour == RED:
+            neighbours += 1
+        
+    if j >= 1 and i < ROWS-1:
+        if grid[i+1][j-1].colour == RED:
+            neighbours += 1
+        
+    if i < ROWS-1:
+        if grid[i+1][j].colour == RED:
+            neighbours += 1
+        
+   
+    if i < ROWS-1 and j < ROWS - 1:
+        if grid[i+1][j+1].colour == RED:
+            neighbours += 1
+
+    return neighbours
+
+
+def simulate(grid):
+
+    for i in range(0,ROWS):
+        for j in range(0, ROWS):
+            surrounds = neighbours(grid, i, j)
+            if surrounds >= 1:
+                grid[i][j].colour = RED
+    
+    return grid
+
+
+
+
+def main():
+    day = 0
+    grid = create_grid()
+    draw_grid(grid)
+    grid = infect(grid)
+    draw_grid(grid)
+    
+   
+    while day <=5:
+        print(day)
+        pygame.time.delay(5000)
+        new_grid = simulate(grid)
+        grid = new_grid
+        draw_grid(grid)
+        day += 1
+
+
+
+main()
     
     
     
