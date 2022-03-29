@@ -100,5 +100,62 @@ ani = animation.FuncAnimation(fig, run, data_gen, interval = 10, init_func=init)
 plt.show()
     
 #more examples on https://matplotlib.org/stable/api/animation_api.html
-        
+ 
+
+
+
+# to save an animation 
+ani.save('animation.mp4',clear_temp = False)
+
+#alternative 1
+#import all of the above imports AND
+from IPython import display
+
+#do relevant plotting of graph
+#following the example on https://www.geeksforgeeks.org/how-to-save-matplotlib-animation/
+
+#have copy and pasted here
+# initializing a figure
+fig = plt.figure()
+  
+# labeling the x-axis and y-axis
+axis = plt.axes(xlim=(0, 4),  ylim=(-1.5, 1.5))
+  
+# initializing a line variable
+line, = axis.plot([], [], lw=3)
+  
+def animate(frame_number):
+    x = np.linspace(0, 4, 1000)
+  
+    # plots a sine graph
+    y = np.sin(2 * np.pi * (x - 0.01 * frame_number))
+    line.set_data(x, y)
+    line.set_color('green')
+    return line,
+  
+  
+anim = animation.FuncAnimation(fig, animate, frames=100, 
+                               interval=20, blit=True)
+fig.suptitle('Sine wave plot', fontsize=14)
+  
+# converting to an html5 video
+video = anim.to_html5_video()
+  
+# embedding for the video
+html = display.HTML(video)
+  
+# draw the animation
+display.display(html)
+plt.close()
+
+
+#alternative 2
+
+#instead of vconverting to a HTML steps, can save to m4
+# saving to m4 using ffmpeg writer
+writervideo = animation.FFMpegWriter(fps=60)
+anim.save('increasingStraightLine.mp4', writer=writervideo)
+plt.close()
+
+   
     
