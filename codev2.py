@@ -10,8 +10,8 @@ import pygame
 import sys 
 
 # Width must be a multiple of rows as you cant have half a box
-WIDTH = 800
-ROWS = 80
+WIDTH = 700
+ROWS = 7
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
 
 WHITE = (255, 255, 255)
@@ -99,65 +99,49 @@ def infect(grid):
     return grid
 
 
-
-
-
 def neighbours(grid, i, j):
+
     neighbours = 0
-    
-    
-    if i >=1 and j>= 1:
-        if grid[i-1][j-1].colour == RED:
-            neighbours += 1
-    
+    a = int(ROWS)
+      
     if i >= 1:
         if grid[i-1][j].colour == RED:
             neighbours += 1
     
-    if i >= 1 and j < ROWS-1:
-        if grid[i-1][j+1].colour == RED:
-            neighbours += 1
-    
-    if j >= 1:
+    if j > 0:
         if grid[i][j-1].colour == RED:
             neighbours += 1
-        
     
-    if grid[i][j].colour == RED:
-        neighbours += 1
+    if grid[i][j] == RED:
+        neighbours +=1 
         
-    if j < ROWS-1:
+    if j < a-1:
         
         if grid[i][j+1].colour == RED:
             neighbours += 1
         
-    if j >= 1 and i < ROWS-1:
-        if grid[i+1][j-1].colour == RED:
-            neighbours += 1
-        
-    if i < ROWS-1:
+    if i < a-1:
         if grid[i+1][j].colour == RED:
             neighbours += 1
-        
    
-    if i < ROWS-1 and j < ROWS - 1:
-        if grid[i+1][j+1].colour == RED:
-            neighbours += 1
-
     return neighbours
-
+    
 
 def simulate(grid):
-
+    
     for i in range(0,ROWS):
         for j in range(0, ROWS):
             surrounds = neighbours(grid, i, j)
+           
             if surrounds >= 1:
-                grid[i][j].colour = RED
+                grid[i][j].colour = BLUE
     
+    for i in range(0,ROWS):
+        for j in range(0, ROWS):
+            if grid[i][j].colour == BLUE:
+                grid[i][j].colour = RED
+                
     return grid
-
-
 
 
 def main():
@@ -168,20 +152,17 @@ def main():
     draw_grid(grid)
     
    
-    while day <=5:
+    while day <=6:
         print(day)
-        pygame.time.delay(5000)
-        new_grid = simulate(grid)
-        grid = new_grid
+        pygame.time.delay(3000)
+        grid = simulate(grid) 
         draw_grid(grid)
         day += 1
 
 
 
 main()
-    
-    
-    
+
     
     
     
