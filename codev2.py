@@ -22,7 +22,7 @@ BLUE = (0, 0, 255)
 BLACK = (0,0,0)
 
 prob = 0.06
-
+death = 0.001
 
 class Box:
     def __init__(self, row, column, width):
@@ -32,6 +32,7 @@ class Box:
         self.y = int(column * width)
         self.colour = WHITE
         self.neighbours = 0 
+        self.infection_timer = 0
         
     def draw_boxes(self, WINDOW):
         pygame.draw.rect(WINDOW, self.colour, (self.x, self.y, WIDTH / ROWS ,WIDTH / ROWS ))
@@ -114,16 +115,27 @@ def simulate(grid):
     for i in range(0,ROWS):
         for j in range(0,ROWS):
             
-            r = random.rand()
-    
-        
-            new_prob = prob * grid[i][j].neighbours
-            if r < new_prob:
-                grid[i][j].colour = RED
+            if grid[i][j].colour != BLACK:
+                r = random.rand()
+                d = random.rand()
             
-            grid[i][j].neighbours = 0
-           
-            
+                new_prob = prob * grid[i][j].neighbours
+                if r < new_prob:
+                    grid[i][j].colour = RED
+                
+                if grid[i][j].colour == RED:
+                    grid[i][j].infection_timer += 1 
+                grid[i][j].neighbours = 0
+               
+                if grid[i][j].infection_timer >= 14:
+                    grid[i][j].colour = GREEN
+                    
+                
+                if grid[i][j].colour == RED:
+                    if d < death:
+                        grid[i][j].colour = BLACK
+                        
+                 
     return grid
 
 
