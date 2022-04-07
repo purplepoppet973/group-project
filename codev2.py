@@ -21,8 +21,8 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 BLACK = (0,0,0)
 
-prob = 0.04
-prob_neighbourless = 0.00000005 #The chance a random person with 1 covid neighbour catches covid
+prob = 0.06
+
 
 class Box:
     def __init__(self, row, column, width):
@@ -93,7 +93,7 @@ def update_display(grid):
 
 
 def infect(grid):
-    pygame.time.delay(2000)
+    pygame.time.delay(1000)
     x = ROWS//2
     y = ROWS//2
     grid[x][y].colour = RED
@@ -116,14 +116,10 @@ def simulate(grid):
             
             r = random.rand()
     
-            #for random
-            if grid[i][j].neighbours == 0:
-                if r < prob_neighbourless:
-                    grid[i][j].colour = RED
-            else:
-                new_prob = prob * grid[i][j].neighbours
-                if r < new_prob:
-                    grid[i][j].colour = RED
+        
+            new_prob = prob * grid[i][j].neighbours
+            if r < new_prob:
+                grid[i][j].colour = RED
             
             grid[i][j].neighbours = 0
            
@@ -139,7 +135,7 @@ def main():
     draw_grid(grid)
     
        
-    while day <=100:
+    while day <=120:
         print("DAY:", day)
         pygame.time.delay(100)
         grid = simulate(grid) 
