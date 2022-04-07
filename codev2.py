@@ -11,8 +11,8 @@ import sys
 from numpy import random
 
 # Width must be a multiple of rows as you cant have half a box
-WIDTH = 840
-ROWS = 21
+WIDTH = 700
+ROWS = 70
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
 
 WHITE = (255, 255, 255)
@@ -21,7 +21,8 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 BLACK = (0,0,0)
 
-prob = 0.1 #The chance a random person with 1 covid neighbour catches covid
+prob = 0.04
+prob_neighbourless = 0.00000005 #The chance a random person with 1 covid neighbour catches covid
 
 class Box:
     def __init__(self, row, column, width):
@@ -30,9 +31,7 @@ class Box:
         self.x = int(row * width)
         self.y = int(column * width)
         self.colour = WHITE
-        self.neighbours = 0
-       
-        
+        self.neighbours = 0 
         
     def draw_boxes(self, WINDOW):
         pygame.draw.rect(WINDOW, self.colour, (self.x, self.y, WIDTH / ROWS ,WIDTH / ROWS ))
@@ -81,8 +80,6 @@ def box_locator(position):
     
     return row_no, col_no
 
-
-
 def update_display(grid):
     
     for row in grid:
@@ -94,16 +91,14 @@ def update_display(grid):
 
     pygame.display.update()
 
+
 def infect(grid):
     pygame.time.delay(2000)
     x = ROWS//2
     y = ROWS//2
     grid[x][y].colour = RED
     
-    
     return grid
-
-
 
     
 def simulate(grid):
@@ -118,17 +113,21 @@ def simulate(grid):
                         
     for i in range(0,ROWS):
         for j in range(0,ROWS):
-            print(grid[i][j].neighbours)
+            
             r = random.rand()
     
-                
-              
-                
-            if r < prob:
-                grid[i][j].colour = RED
-
+            #for random
+            if grid[i][j].neighbours == 0:
+                if r < prob_neighbourless:
+                    grid[i][j].colour = RED
+            else:
+                new_prob = prob * grid[i][j].neighbours
+                if r < new_prob:
+                    grid[i][j].colour = RED
+            
             grid[i][j].neighbours = 0
-                
+           
+            
     return grid
 
 
@@ -140,9 +139,9 @@ def main():
     draw_grid(grid)
     
        
-    while day <=20:
+    while day <=100:
         print("DAY:", day)
-        pygame.time.delay(000)
+        pygame.time.delay(100)
         grid = simulate(grid) 
         draw_grid(grid)
         day += 1
