@@ -8,10 +8,11 @@ Created on Mon Mar 28 21:14:59 2022
 
 import pygame 
 import sys 
+from numpy import random
 
 # Width must be a multiple of rows as you cant have half a box
-WIDTH = 700
-ROWS = 7
+WIDTH = 840
+ROWS = 21
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
 
 WHITE = (255, 255, 255)
@@ -20,6 +21,8 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 BLACK = (0,0,0)
 
+prob = 0.1 #The chance a random person with 1 covid neighbour catches covid
+
 class Box:
     def __init__(self, row, column, width):
         self.row = row
@@ -27,6 +30,7 @@ class Box:
         self.x = int(row * width)
         self.y = int(column * width)
         self.colour = WHITE
+        self.neighbours = 0
        
         
         
@@ -96,50 +100,34 @@ def infect(grid):
     y = ROWS//2
     grid[x][y].colour = RED
     
+    
     return grid
 
 
-def neighbours(grid, i, j):
 
-    neighbours = 0
-    a = int(ROWS)
-      
-    if i >= 1:
-        if grid[i-1][j].colour == RED:
-            neighbours += 1
     
-    if j > 0:
-        if grid[i][j-1].colour == RED:
-            neighbours += 1
-    
-    if grid[i][j] == RED:
-        neighbours +=1 
-        
-    if j < a-1:
-        
-        if grid[i][j+1].colour == RED:
-            neighbours += 1
-        
-    if i < a-1:
-        if grid[i+1][j].colour == RED:
-            neighbours += 1
-   
-    return neighbours
-    
-
 def simulate(grid):
-    
+
     for i in range(0,ROWS):
-        for j in range(0, ROWS):
-            surrounds = neighbours(grid, i, j)
-           
-            if surrounds >= 1:
-                grid[i][j].colour = BLUE
-    
+        for j in range(0,ROWS):
+            
+            if grid[i][j].colour == RED:
+                for b in range(-1,2):
+                    for c in range(-1,2):
+                        grid[(i+b)%ROWS][(j+c)%ROWS].neighbours += 1
+                        
     for i in range(0,ROWS):
-        for j in range(0, ROWS):
-            if grid[i][j].colour == BLUE:
+        for j in range(0,ROWS):
+            print(grid[i][j].neighbours)
+            r = random.rand()
+    
+                
+              
+                
+            if r < prob:
                 grid[i][j].colour = RED
+
+            grid[i][j].neighbours = 0
                 
     return grid
 
@@ -151,27 +139,19 @@ def main():
     grid = infect(grid)
     draw_grid(grid)
     
-   
-    while day <=6:
-        print(day)
-        pygame.time.delay(3000)
+       
+    while day <=20:
+        print("DAY:", day)
+        pygame.time.delay(000)
         grid = simulate(grid) 
         draw_grid(grid)
         day += 1
 
 
+    
 
 main()
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
