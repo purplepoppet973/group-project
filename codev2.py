@@ -60,7 +60,6 @@ def menu_create():
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-              
 
 class Box:
     def __init__(self, row, column, width):
@@ -244,33 +243,32 @@ def begin():
             if day > 150:
                 run = False
                 running = False
-    return REDlist, WHITElist, GREENlist, BLUElist, BLACKlist
+    
+    x = [0]
+    for y in range(0,150):
+        x.append(y)
+    a = REDlist
+    b = WHITElist 
+    c = GREENlist
+    d = BLUElist
+    e = BLACKlist
+    plt.plot(x, a, 'r')
+    plt.plot(x, b, 'k--')
+    plt.plot(x, c, 'g')
+    plt.plot(x, d, 'b')
+    plt.plot(x, e, 'k')
+    plt.ylabel('No. of people')
+    plt.xlabel('Days')
+    plt.title('SIR graph')
+    plt.show()  
+
 
 def main():
     menu_create()
 
 main()
 
-a, b, c, d, e = begin()
-x = [0]
-for y in range(0,150):
-    x.append(y)
 
-print("RED =", a)
-print("WHITE =", b)
-print("GREEN =", c)
-print("BLUE =", d) 
-print("BLACK =", e)
-
-plt.plot(x, a, 'r')
-plt.plot(x, b, 'k--')
-plt.plot(x, c, 'g')
-plt.plot(x, d, 'b')
-plt.plot(x, e, 'k')
-plt.ylabel('No. of people')
-plt.xlabel('Days')
-plt.title('SIR graph')
-plt.show()
 
 
 
