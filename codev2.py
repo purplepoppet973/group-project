@@ -9,7 +9,8 @@ Created on Wed Apr 13 21:02:31 2022
 import pygame 
 import sys 
 from numpy import random
-
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Width must be a multiple of rows as you cant have half a box
 WIDTH = 700
@@ -37,7 +38,7 @@ def menu_create():
     WINDOW.blit(text1,(100,100))
     WINDOW.blit(text2,(100,200))
     WINDOW.blit(text3,(100,300))
- 
+
     pygame.display.flip()
     running = True
     
@@ -59,8 +60,8 @@ def menu_create():
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-                
- 
+              
+
 class Box:
     def __init__(self, row, column, width):
         self.row = row
@@ -150,7 +151,7 @@ def simulate(grid):
                 if grid[i][j].colour == RED:
                     grid[i][j].infection_timer += 1 
                 grid[i][j].neighbours = 0
-               
+                
                 if grid[i][j].infection_timer >= 14:
                     grid[i][j].colour = GREEN
                     
@@ -177,8 +178,13 @@ def begin():
     Box.draw_grid(grid)
     grid = infect(grid)
     Box.draw_grid(grid)
+    REDlist = []   
+    WHITElist = []
+    GREENlist = []
+    BLUElist = []
+    BLACKlist = [] 
     running = True
-       
+      
     while running == True:
         run = None
         for event in pygame.event.get():
@@ -192,14 +198,18 @@ def begin():
                         sys.exit()
                         
                 
-                        
+                  
         while run == True:
             
             print("DAY:", day)
-            pygame.time.delay(50)
+            pygame.time.delay(1)
             grid = simulate(grid) 
             Box.draw_grid(grid)
-            day += 1
+            REDtotal = 0
+            WHITEtotal = 0
+            GREENtotal = 0
+            BLUEtotal = 0
+            BLACKtotal = 0
             
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -210,21 +220,61 @@ def begin():
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
-                
+            
+            for i in range(0,ROWS):
+                for j in range(0,ROWS):
+                    if grid[i][j].colour == RED:
+                        REDtotal += 1
+                    if grid[i][j].colour == WHITE:
+                        WHITEtotal +=1
+                    if grid[i][j].colour == GREEN:
+                        GREENtotal +=1
+                    if grid[i][j].colour == BLUE:
+                        BLUEtotal +=1
+                    if grid[i][j].colour == BLACK:
+                        BLACKtotal +=1
+            REDlist.append(REDtotal)
+            WHITElist.append(WHITEtotal)
+            GREENlist.append(GREENtotal)
+            BLUElist.append(BLUEtotal)
+            BLACKlist.append(BLACKtotal)
+            day += 1
+    
                 
             if day > 150:
                 run = False
                 running = False
-        
+    return REDlist, WHITElist, GREENlist, BLUElist, BLACKlist
 
 def main():
     menu_create()
 
-
-
 main()
 
-    
+a, b, c, d, e = begin()
+x = [0]
+for y in range(0,150):
+    x.append(y)
+
+print("RED =", a)
+print("WHITE =", b)
+print("GREEN =", c)
+print("BLUE =", d) 
+print("BLACK =", e)
+
+plt.plot(x, a, 'r')
+plt.plot(x, b, 'k--')
+plt.plot(x, c, 'g')
+plt.plot(x, d, 'b')
+plt.plot(x, e, 'k')
+plt.ylabel('No. of people')
+plt.xlabel('Days')
+plt.title('SIR graph')
+plt.show()
+
+
+
+
     
     
 
