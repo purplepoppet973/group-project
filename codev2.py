@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Mar 28 21:14:59 2022
+Created on Wed Apr 13 21:02:31 2022
 
 @author: freddie
 """
@@ -9,6 +9,7 @@ Created on Mon Mar 28 21:14:59 2022
 import pygame 
 import sys 
 from numpy import random
+
 
 # Width must be a multiple of rows as you cant have half a box
 WIDTH = 700
@@ -22,8 +23,44 @@ BLUE = (0, 0, 255)
 BLACK = (0,0,0)
 
 prob = 0.06
-death = 0.001
+death = 0.008
 
+
+def menu_create():
+    pygame.display.set_caption('Simulation Menu')
+    WINDOW.fill(WHITE)
+    pygame.font.init()
+    smallfont = pygame.font.SysFont('comic sans',35) 
+    text1 = smallfont.render("Press Enter to begin the simulation" , False , BLACK) 
+    text2 = smallfont.render("Press Space to pause/unpause the simulation" , False , BLACK) 
+    text3 = smallfont.render("Press Escape to exit" , False , BLACK)
+    WINDOW.blit(text1,(100,100))
+    WINDOW.blit(text2,(100,200))
+    WINDOW.blit(text3,(100,300))
+ 
+    pygame.display.flip()
+    running = True
+    
+    while running:
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          running = False
+          pygame.quit()
+          sys.exit()
+          
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                begin()
+                pygame.quit()
+                sys.exit()
+                
+                
+                
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+                
+ 
 class Box:
     def __init__(self, row, column, width):
         self.row = row
@@ -33,70 +70,53 @@ class Box:
         self.colour = WHITE
         self.neighbours = 0 
         self.infection_timer = 0
+        self.recoverytimer = 0
         
     def draw_boxes(self, WINDOW):
         pygame.draw.rect(WINDOW, self.colour, (self.x, self.y, WIDTH / ROWS ,WIDTH / ROWS ))
     
-
-def create_grid():
-    grid = []
-    box_width = WIDTH//ROWS
     
-    
-    for i in range(ROWS):
-        grid.append([])
-        for j in range(ROWS):
-            
-           box = Box(i, j, box_width)
-           grid[i].append(box)
-   
-    return grid
-
-def draw_grid_lines():
-    box_width = WIDTH//ROWS
-    
-    for i in range(ROWS):
-        pygame.draw.line(WINDOW, BLACK, (0, i * box_width), (WIDTH, i * box_width))
+    def create_grid():
+        grid = []
+        box_width = WIDTH//ROWS
         
-    for j in range(ROWS):
-        pygame.draw.line(WINDOW, BLACK , (j * box_width, 0), (j * box_width, WIDTH))  
+        
+        for i in range(ROWS):
+            grid.append([])
+            for j in range(ROWS):
+                
+               box = Box(i, j, box_width)
+               grid[i].append(box)
+       
+        return grid
+
+    def draw_grid_lines():
+        box_width = WIDTH//ROWS
+        
+        for i in range(ROWS):
+            pygame.draw.line(WINDOW, BLACK, (0, i * box_width), (WIDTH, i * box_width))
+            
+        for j in range(ROWS):
+            pygame.draw.line(WINDOW, BLACK , (j * box_width, 0), (j * box_width, WIDTH))  
     
 
-def draw_grid(grid):
-    
-    for row in grid:
-        for point in row:
-            point.draw_boxes(WINDOW)
-    draw_grid_lines()        
-    pygame.display.update()
+    def draw_grid(grid):
+        
+        for row in grid:
+            for point in row:
+                point.draw_boxes(WINDOW)
+        Box.draw_grid_lines()        
+        pygame.display.update()
+        
+
     
 
-def box_locator(position):
-    x,y = position 
-    
-    z = WIDTH/ROWS #Need to rename this variable 
-    
-    row_no = x //z
-    col_no = y //z
-    
-    return row_no, col_no
-
-def update_display(grid):
-    
-    for row in grid:
-
-        for spot in row:
-            spot.draw_boxes(WINDOW)
-
-    draw_grid()
-
-    pygame.display.update()
 
 
 def infect(grid):
     pygame.time.delay(1000)
-    x = ROWS//2
-    y = ROWS//2
+    x = random.randint(0, ROWS)
+    y = random.randint(0,ROWS)
     grid[x][y].colour = RED
     
     return grid
@@ -123,6 +143,10 @@ def simulate(grid):
                 if r < new_prob:
                     grid[i][j].colour = RED
                 
+                random_infect = 0.00000000
+                if r < random_infect:
+                    grid[i][j].colour = RED
+                
                 if grid[i][j].colour == RED:
                     grid[i][j].infection_timer += 1 
                 grid[i][j].neighbours = 0
@@ -135,32 +159,71 @@ def simulate(grid):
                     if d < death:
                         grid[i][j].colour = BLACK
                         
-                 
+                if grid[i][j].colour == GREEN:
+                    grid[i][j].recoverytimer += 1
+                    
+                    if grid[i][j].recoverytimer == 1200:
+                        grid[i][j].colour = WHITE
+                        grid[i][j].recoverytimer = 0
+                        grid[i][j].infection_timer = 0
+                
     return grid
 
 
-def main():
+def begin():
+    pygame.display.set_caption('Simulation')
     day = 0
-    grid = create_grid()
-    draw_grid(grid)
+    grid = Box.create_grid()
+    Box.draw_grid(grid)
     grid = infect(grid)
-    draw_grid(grid)
-    
+    Box.draw_grid(grid)
+    running = True
        
-    while day <=120:
-        print("DAY:", day)
-        pygame.time.delay(100)
-        grid = simulate(grid) 
-        draw_grid(grid)
-        day += 1
+    while running == True:
+        run = None
+        for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        run = True
+                    
+                    
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+                        
+                
+                        
+        while run == True:
+            
+            print("DAY:", day)
+            pygame.time.delay(50)
+            grid = simulate(grid) 
+            Box.draw_grid(grid)
+            day += 1
+            
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        run = False
+               
+                    
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+                
+                
+            if day > 150:
+                run = False
+                running = False
+        
+
+def main():
+    menu_create()
 
 
-    
 
 main()
 
-    
-    
     
     
     
