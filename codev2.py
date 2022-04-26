@@ -6,7 +6,6 @@ Created on Wed Apr 13 21:02:31 2022
 @author: freddie
 """
 
-
 import pygame 
 import sys 
 from numpy import random
@@ -26,7 +25,8 @@ BLACK = (0,0,0)
 
 prob = 0.07
 death = 0.003
-day_max = int(input("Enter the number of days you wish for the code to run: "))
+day_max = 300
+vax_level = 0.008
 
 
 def menu_create():
@@ -114,6 +114,7 @@ class Box:
 
 def infect(grid):
 
+   
     pygame.time.delay(1000)
     x = random.randint(0, ROWS)
     y = random.randint(0,ROWS)
@@ -121,9 +122,22 @@ def infect(grid):
     
     return grid
 
-    
-def simulate(grid):
 
+def vaccinate(grid, day):
+    
+    if day >= 300:
+    
+        for i in range(0,ROWS):
+            for j in range(0,ROWS):
+                if grid[i][j].colour == WHITE:
+                    v = random.rand()
+                    if v < vax_level:
+                        grid[i][j].colour = BLUE
+                    
+    return grid
+def simulate(grid, day):
+
+    vaccinate(grid, day)
     for i in range(0,ROWS):
         for j in range(0,ROWS):
             
@@ -156,6 +170,8 @@ def simulate(grid):
                     if grid[i][j].colour == RED:
                         if d < death:
                             grid[i][j].colour = BLACK
+                            
+                   
                                       
                 
     return grid
@@ -191,10 +207,9 @@ def begin():
                 
                   
         while run == True:
-            caption = "Simulation day number: " + str(day)
-            pygame.display.set_caption(caption)
+           
             pygame.time.delay(1)
-            grid = simulate(grid) 
+            grid = simulate(grid, day) 
             Box.draw_grid(grid)
             REDtotal = 0
             WHITEtotal = 0
@@ -226,6 +241,7 @@ def begin():
                         BLUEtotal +=1
                     if grid[i][j].colour == BLACK:
                         BLACKtotal +=1
+                    
             REDlist.append(REDtotal)
             WHITElist.append(WHITEtotal)
             GREENlist.append(GREENtotal)
@@ -248,18 +264,18 @@ def begin():
     e = BLACKlist
     
     fig, ax = plt.subplots()
-
+    
     ax.plot(x, a, 'r', label = 'infected')
     ax.plot(x, b, 'k--', label = 'succeptible')
     ax.plot(x, c, 'g', label = 'recovered')
     ax.plot(x, d, 'b', label = 'vaccinated')
     ax.plot(x, e, 'k', label = 'dead')
-
+    
     leg = ax.legend()
-
+    
     plt.ylabel('No. of people')
     plt.xlabel('Days')
-    plt.title('SIR graph')
+    plt.title('SIRVD graph')
     plt.show()  
 
 
@@ -267,6 +283,7 @@ def main():
     menu_create()
 
 main()
+
 
 
 
