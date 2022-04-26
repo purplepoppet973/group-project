@@ -238,18 +238,24 @@ def begin():
                 running = False
     
     x = [0]
-    for y in range(0,day_max):
+    for y in range(0,150):
         x.append(y)
     a = REDlist
     b = WHITElist 
     c = GREENlist
     d = BLUElist
     e = BLACKlist
-    plt.plot(x, a, 'r')
-    plt.plot(x, b, 'k--')
-    plt.plot(x, c, 'g')
-    plt.plot(x, d, 'b')
-    plt.plot(x, e, 'k')
+    
+    fig, ax = plt.subplots()
+    
+    ax.plot(x, a, 'r', label = 'infected')
+    ax.plot(x, b, 'k--', label = 'succeptible')
+    ax.plot(x, c, 'g', label = 'recovered')
+    ax.plot(x, d, 'b', label = 'vaccinated')
+    ax.plot(x, e, 'k', label = 'dead')
+    
+    leg = ax.legend()
+    
     plt.ylabel('No. of people')
     plt.xlabel('Days')
     plt.title('SIR graph')
