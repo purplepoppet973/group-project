@@ -14,7 +14,7 @@ import numpy as np
 
 # Width must be a multiple of rows as you cant have half a box
 WIDTH = 700
-ROWS = 70
+ROWS = 100
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
 
 WHITE = (255, 255, 255)
@@ -23,8 +23,9 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 BLACK = (0,0,0)
 
-prob = 0.06
-death = 0.008
+prob = 0.07
+death = 0.003
+day_max = 300
 
 
 def menu_create():
@@ -70,7 +71,7 @@ class Box:
         self.colour = WHITE
         self.neighbours = 0 
         self.infection_timer = 0
-        self.recoverytimer = 0
+
         
     def draw_boxes(self, WINDOW):
         pygame.draw.rect(WINDOW, self.colour, (self.x, self.y, WIDTH / ROWS ,WIDTH / ROWS ))
@@ -107,13 +108,12 @@ class Box:
                 point.draw_boxes(WINDOW)
         Box.draw_grid_lines()        
         pygame.display.update()
-        
-
     
 
 
-
 def infect(grid):
+
+   
     pygame.time.delay(1000)
     x = random.randint(0, ROWS)
     y = random.randint(0,ROWS)
@@ -136,36 +136,27 @@ def simulate(grid):
         for j in range(0,ROWS):
             
             if grid[i][j].colour != BLACK:
-                r = random.rand()
-                d = random.rand()
-            
-                new_prob = prob * grid[i][j].neighbours
-                if r < new_prob:
-                    grid[i][j].colour = RED
+                if grid[i][j].colour != BLUE:
+                    r = random.rand()
+                    d = random.rand()
                 
-                random_infect = 0.00000000
-                if r < random_infect:
-                    grid[i][j].colour = RED
-                
-                if grid[i][j].colour == RED:
-                    grid[i][j].infection_timer += 1 
-                grid[i][j].neighbours = 0
-                
-                if grid[i][j].infection_timer >= 14:
-                    grid[i][j].colour = GREEN
+                    new_prob = prob * grid[i][j].neighbours
+                    if r < new_prob:
+                        grid[i][j].colour = RED
+    
+        
+                    if grid[i][j].colour == RED:
+                        grid[i][j].infection_timer += 1 
+                    grid[i][j].neighbours = 0
                     
-                
-                if grid[i][j].colour == RED:
-                    if d < death:
-                        grid[i][j].colour = BLACK
+                    if grid[i][j].infection_timer >= 14:
+                        grid[i][j].colour = GREEN
                         
-                if grid[i][j].colour == GREEN:
-                    grid[i][j].recoverytimer += 1
                     
-                    if grid[i][j].recoverytimer == 1200:
-                        grid[i][j].colour = WHITE
-                        grid[i][j].recoverytimer = 0
-                        grid[i][j].infection_timer = 0
+                    if grid[i][j].colour == RED:
+                        if d < death:
+                            grid[i][j].colour = BLACK
+                                      
                 
     return grid
 
@@ -177,6 +168,7 @@ def begin():
     Box.draw_grid(grid)
     grid = infect(grid)
     Box.draw_grid(grid)
+    
     REDlist = []   
     WHITElist = []
     GREENlist = []
@@ -199,8 +191,7 @@ def begin():
                 
                   
         while run == True:
-            
-            print("DAY:", day)
+           
             pygame.time.delay(1)
             grid = simulate(grid) 
             Box.draw_grid(grid)
@@ -219,6 +210,8 @@ def begin():
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+            
+            
             
             for i in range(0,ROWS):
                 for j in range(0,ROWS):
@@ -240,12 +233,12 @@ def begin():
             day += 1
     
                 
-            if day > 150:
+            if day > day_max:
                 run = False
                 running = False
     
     x = [0]
-    for y in range(0,150):
+    for y in range(0,day_max):
         x.append(y)
     a = REDlist
     b = WHITElist 
