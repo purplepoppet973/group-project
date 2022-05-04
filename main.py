@@ -29,59 +29,76 @@ BLACK = (0,0,0)
 
 
 def settings():
-    q1 = input("If you would like to use default settings: enter 'd', if you would like to use custom settings enter 'c': ")
     
-    if q1 == "d":
-        prob = 0.05
-        death = 0.01
-        day_max = 300
-        vax_level = 0.008
-        vax_day = 200
-        menu_create(prob, death, day_max, vax_level, vax_day)
-            
-    elif q1 == "c":
-        prob = float(input("Enter a value between 0 and 1 for the probability of infection: "))
+    q0 = input("Press 'a' if you would like to see a single simulation, or press'b' if you would like to compare multiple variations of paramaters: ")
+    
+    if q0 == 'a':
+        q1 = input("If you would like to use default settings: enter 'd', if you would like to use custom settings enter 'c': ")
         
-        if prob >= 0 and prob <= 1:
-            death = float(input("Enter a value between 0 and 1 for the probability of death: "))
-            
-            if death >= 0 and death <= 1:  
-                day_max = int(input("Enter an integer for how many days the simulation should run: "))
-        
-                q2 = input("If you wish for vaccinations to occur in this simulation, enter 'y', otherwise enter 'n': ")
-                 
-                if q2 == 'y':
-                    vax_day = int(input("At what day of the simulation do you wish for vaccinations to begin: "))
-                    vax_level = float(input("Enter a value between 0 and 1 for the percetange of the susceptible poulation that get vaccainted each day: "))
+        if q1 == "d":
+            prob = 0.05
+            death = 0.01
+            day_max = 300
+            vax_level = 0.008
+            vax_day = 200
+            menu_create(prob, death, day_max, vax_level, vax_day)
                 
-                    if vax_level > 1 or vax_level < 0:
+        elif q1 == "c":
+            prob = float(input("Enter a value between 0 and 1 for the probability of infection: "))
+            
+            if prob >= 0 and prob <= 1:
+                death = float(input("Enter a value between 0 and 1 for the probability of death: "))
+                
+                if death >= 0 and death <= 1:  
+                    day_max = int(input("Enter an integer for how many days the simulation should run: "))
+            
+                    q2 = input("If you wish for vaccinations to occur in this simulation, enter 'y', otherwise enter 'n': ")
+                     
+                    if q2 == 'y':
+                        vax_day = int(input("At what day of the simulation do you wish for vaccinations to begin: "))
+                        vax_level = float(input("Enter a value between 0 and 1 for the percetange of the susceptible poulation that get vaccainted each day: "))
+                    
+                        if vax_level > 1 or vax_level < 0:
+                            print("Error, not a correct input. Restart")
+                            settings()
+                    
+                        else:
+                            menu_create(prob, death, day_max, vax_level, vax_day)
+                        
+                    elif q2 == 'n':
+                        vax_day = 0
+                        vax_level = 0
+                        menu_create(prob, death, day_max, vax_level, vax_day)
+                    else:
                         print("Error, not a correct input. Restart")
                         settings()
                 
-                    else:
-                        menu_create(prob, death, day_max, vax_level, vax_day)
-                    
-                elif q2 == 'n':
-                    vax_day = 0
-                    vax_level = 0
-                    menu_create(prob, death, day_max, vax_level, vax_day)
-                else:
+                
+                
+                else: 
                     print("Error, not a correct input. Restart")
                     settings()
-            
-            
-            
-            else: 
+       
+            else:
                 print("Error, not a correct input. Restart")
                 settings()
-   
+       
         else:
-            print("Error, not a correct input. Restart")
+            print("Error, not a correct input. Restart.")
             settings()
-   
+      
+    elif q0 == "b":
+        print("lols")
+        
+    
     else:
-        print("Error, not a correct input. Restart.")
+        print("Error, not a correct input. Restart")
         settings()
+        
+        
+    
+    
+    
     
 
 
@@ -201,6 +218,9 @@ def begin(prob, death, day_max, vax_level, vax_day):
 
     graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max)
     
+
+
+
 
 def graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max):
     x = [0]
