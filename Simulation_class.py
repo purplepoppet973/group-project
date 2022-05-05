@@ -13,7 +13,7 @@ import numpy as np
 
 WIDTH = 700
 ROWS = 100
-WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
+
 WHITE = (255, 255, 255)
 RED = (255,0,0)
 GREEN = (0, 255, 0)
@@ -23,7 +23,7 @@ BLACK = (0,0,0)
 
 class Simulation:
     
-
+   
     def __init__(self, grid, day, day_max, prob, death, vax_level, vax_day):
         self.grid = grid
         self.day = day

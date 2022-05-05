@@ -13,7 +13,7 @@ import numpy as np
 
 WIDTH = 700
 ROWS = 100
-WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
+
 
 WHITE = (255, 255, 255)
 RED = (255,0,0)
@@ -52,7 +52,7 @@ class Box:
 
         return grid
 
-    def draw_grid_lines():
+    def draw_grid_lines(WINDOW):
         box_width = WIDTH//ROWS
 
         for i in range(ROWS):
@@ -62,10 +62,20 @@ class Box:
             pygame.draw.line(WINDOW, BLACK , (j * box_width, 0), (j * box_width, WIDTH))  
 
 
-    def draw_grid(grid):
-
+    def draw_grid(grid, WINDOW):
         for row in grid:
             for point in row:
                 point.draw_boxes(WINDOW)
-        Box.draw_grid_lines()        
+        Box.draw_grid_lines(WINDOW)        
         pygame.display.update()
+        
+  
+       
+       
+       
+       
+       
+       
+       
+
+     

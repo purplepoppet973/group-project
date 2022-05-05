@@ -39,7 +39,7 @@ def settings():
             death = 0.01
             day_max = 300
             vax_level = 0.008
-            vax_day = 200
+            vax_day = 130
             menu_create(prob, death, day_max, vax_level, vax_day)
                 
         elif q1 == "c":
@@ -186,10 +186,11 @@ def menu_create(prob, death, day_max, vax_level, vax_day,):
 
 
 def single_sim(prob, death, day_max, vax_level, vax_day):
+    WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
     pygame.display.set_caption('Simulation - Press space to begin')
     day = 0
     grid = Box.create_grid()
-    Box.draw_grid(grid)
+    Box.draw_grid(grid, WINDOW)
     
 
     REDlist, WHITElist, GREENlist, BLUElist, BLACKlist = [],[],[],[],[]
@@ -213,7 +214,7 @@ def single_sim(prob, death, day_max, vax_level, vax_day):
             pygame.display.set_caption(caption)
             pygame.time.delay(1)
             grid = Simulation.simulate(grid, day, prob, death, day_max, vax_level, vax_day) 
-            Box.draw_grid(grid)
+            Box.draw_grid(grid, WINDOW)
             
             REDtotal, WHITEtotal, GREENtotal, BLUEtotal, BLACKtotal = 0,0,0,0,0
         
