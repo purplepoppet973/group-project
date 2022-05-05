@@ -157,6 +157,10 @@ def settings():
         print("Error, not a correct input. Restart")
         settings()
 
+# =============================================================================
+# Section where the simulations are run 
+# =============================================================================
+
 def menu_create(prob, death, day_max, vax_level, vax_day,):
     '''
     Creates a startup menu in the pygame window explaining controls.
@@ -380,7 +384,9 @@ def multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_
     
     multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREENlist2,BLUElist1, BLUElist2,BLACKlist1, BLACKlist2, vax_day1, vax_day2, day_max )
 
-
+# =============================================================================
+# # This section contains the code where the graphs are made:
+# =============================================================================
 
 def single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max):
     '''
@@ -485,9 +491,19 @@ def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREEN
     plt.show
     
    
-    
+# =============================================================================
+# Where the code is run:        
+# =============================================================================
 
 def main():
+    '''
+    Runs settings() and begins the code.
+
+    Returns
+    -------
+    None.
+
+    '''
     settings()
    
 
