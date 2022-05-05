@@ -1,6 +1,6 @@
 # Disease simulation project - Daisy Rouse, Maddy Shaw, Jaco Van Eeden, Freddie Hurd-Wood
 
-This project’s main purpose is to simulate the spread of a disease in a 2d grid based population. The projects code can be used to run a simulation off of settings and produce an animation showing the spread of the disease on a grid then producing a SIRVD graph of the spread. Secondarily the code can be used to run two simulations at the same time, without displaying them, to then produce two SIRVD graphs on the same plot so they can be compared with one another.
+This project’s main purpose is to simulate the spread of a disease in a 2d grid based population. The projects code can be used to run a simulation off of settings and produce an animation showing the spread of the disease on a grid, then producing a SIRVD graph of the spread. Secondarily the code can be used to run two simulations at the same time, without displaying them, to then produce two SIRVD graphs on the same plot so they can be compared with one another.
 
 The code consists of:
 
@@ -10,5 +10,9 @@ The code consists of:
 
 To run this code, call the file main.py from terminal. No command line arguments are needed as there will be terminal prompts to determine the settings for the code.
 
+To view the grid simulation, a new window will be opened along the task bar, which needs to be clicked on to open. 
+The SIRVD graph is viewed on the plots tab in Spyder.
+
 NOTE: For the code to work, pygame must be installed.
+
 
