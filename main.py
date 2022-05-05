@@ -15,7 +15,6 @@ from Simulation_class import *
 
 WIDTH = 700
 ROWS = 100
-WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
 
 WHITE = (255, 255, 255)
 RED = (255,0,0)
@@ -73,8 +72,6 @@ def settings():
                         print("Error, not a correct input. Restart")
                         settings()
                 
-                
-                
                 else: 
                     print("Error, not a correct input. Restart")
                     settings()
@@ -88,22 +85,69 @@ def settings():
             settings()
       
     elif q0 == "b":
-        print("lols")
+        prob1 = float(input("Enter a value between 0 and 1 for the first simulation probability of infection: "))
+        prob2 = float(input("Enter a value between 0 and 1 for the second simulation probability of infection: "))
+            
+        if prob1 >= 0 and prob1 <= 1 and prob2 >= 0 and prob2 <= 1:
+            death1 = float(input("Enter a value between 0 and 1 for the first simulation probability of death: "))
+            death2 = float(input("Enter a value between 0 and 1 for the second simulation probability of death: "))
+            
+            if death1 >= 0 and death1 <= 1 and death2 >= 0 and death2 <= 1 :  
+                day_max = int(input("Enter an integer for how many days the simulation should run: "))
         
+                q2 = input("If you wish for vaccinations to occur in simulation 1, enter 'y', otherwise enter 'n': ")
+                 
+                if q2 == 'y':
+                    vax_day1 = int(input("At what day of the simulation do you wish for vaccinations to begin: "))
+                    vax_level1 = float(input("Enter a value between 0 and 1 for the percetange of the susceptible poulation that get vaccainted each day: "))
+                
+                    if vax_level1 > 1 or vax_level1 < 0:
+                        print("Error, not a correct input. Restart")
+                        settings()
+                
+                elif q2 == 'n':
+                    vax_day1 = 0
+                    vax_level1 = 0
+                    
+                
+                else:
+                    print("Error, not a correct input. Restart")
+                    settings()
+                
+                q3 = input("If you wish for vaccinations to occur in simulation 2, enter 'y', otherwise enter 'n': ")
+                if q3 == 'y':
+                    vax_day2 = int(input("At what day of the simulation do you wish for vaccinations to begin: "))
+                    vax_level2 = float(input("Enter a value between 0 and 1 for the percetange of the susceptible poulation that get vaccainted each day: "))
+                
+                    if vax_level2 > 1 or vax_level2 < 0:
+                        print("Error, not a correct input. Restart")
+                        settings()
+                
+                elif q2 == 'n':
+                    vax_day2 = 0
+                    vax_level2 = 0
+                    
+                
+                else:
+                    print("Error, not a correct input. Restart")
+                    settings()
+            else: 
+                print("Error, not a correct input. Restart")
+                settings()
+   
+        else:
+            print("Error, not a correct input. Restart")
+            settings()
+        
+        print("Your simulations are now running")
+        multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2)
     
     else:
         print("Error, not a correct input. Restart")
         settings()
-        
-        
-    
-    
-    
-    
 
-
-
-def menu_create(prob, death, day_max, vax_level, vax_day):
+def menu_create(prob, death, day_max, vax_level, vax_day,):
+    WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
     pygame.display.set_caption('Simulation Menu')
     WINDOW.fill(WHITE)
     pygame.font.init()
@@ -126,11 +170,14 @@ def menu_create(prob, death, day_max, vax_level, vax_day):
           sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-                begin(prob, death, day_max, vax_level, vax_day)
+            if event.key == pygame.K_RETURN:        
+                single_sim(prob, death, day_max, vax_level, vax_day)
                 pygame.quit()
                 sys.exit()
 
+                
+                
+                
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
@@ -138,18 +185,15 @@ def menu_create(prob, death, day_max, vax_level, vax_day):
 
 
 
-def begin(prob, death, day_max, vax_level, vax_day):
+def single_sim(prob, death, day_max, vax_level, vax_day):
     pygame.display.set_caption('Simulation - Press space to begin')
     day = 0
     grid = Box.create_grid()
     Box.draw_grid(grid)
     
 
-    REDlist = []   
-    WHITElist = []
-    GREENlist = []
-    BLUElist = []
-    BLACKlist = [] 
+    REDlist, WHITElist, GREENlist, BLUElist, BLACKlist = [],[],[],[],[]
+
     running = True
 
     while running == True:
@@ -158,8 +202,7 @@ def begin(prob, death, day_max, vax_level, vax_day):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         run = True
-
-
+                        
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
@@ -171,17 +214,14 @@ def begin(prob, death, day_max, vax_level, vax_day):
             pygame.time.delay(1)
             grid = Simulation.simulate(grid, day, prob, death, day_max, vax_level, vax_day) 
             Box.draw_grid(grid)
-            REDtotal = 0
-            WHITEtotal = 0
-            GREENtotal = 0
-            BLUEtotal = 0
-            BLACKtotal = 0
+            
+            REDtotal, WHITEtotal, GREENtotal, BLUEtotal, BLACKtotal = 0,0,0,0,0
+        
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         run = False
-
 
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
@@ -216,13 +256,74 @@ def begin(prob, death, day_max, vax_level, vax_day):
 
     
 
-    graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max)
+    single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max)
     
+def multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2):
+   
+    REDlist1, WHITElist1, GREENlist1, BLUElist1, BLACKlist1 = [],[],[],[],[]
+    REDlist2, WHITElist2, GREENlist2, BLUElist2, BLACKlist2 = [],[],[],[],[]
+    day = 0
+    grid1 = Box.create_grid()
+    grid2 = Box.create_grid()
+    run = True
+    
+    while run == True:
+        REDtotal1, WHITEtotal1, GREENtotal1, BLUEtotal1, BLACKtotal1 = 0,0,0,0,0
+        REDtotal2, WHITEtotal2, GREENtotal2, BLUEtotal2, BLACKtotal2 = 0,0,0,0,0
+        grid1 = Simulation.simulate(grid1, day, prob1, death1, day_max, vax_level1, vax_day1)
+        grid2 = Simulation.simulate(grid2, day, prob2, death2, day_max, vax_level2, vax_day2)
+        
+        
+        for i in range(0,ROWS):
+            for j in range(0,ROWS):
+                if grid1[i][j].colour == RED:
+                    REDtotal1 += 1
+                if grid2[i][j].colour == RED:
+                    REDtotal2 += 1
+                
+                if grid1[i][j].colour == WHITE:
+                    WHITEtotal1 +=1
+                if grid2[i][j].colour == WHITE:
+                    WHITEtotal2 +=1
+                
+                if grid1[i][j].colour == GREEN:
+                    GREENtotal1 +=1
+                if grid2[i][j].colour == GREEN:
+                    GREENtotal2 +=1
+            
+                if grid1[i][j].colour == BLUE:
+                    BLUEtotal1 +=1
+                if grid2[i][j].colour == BLUE:
+                    BLUEtotal2 +=1
+                
+                if grid1[i][j].colour == BLACK:
+                    BLACKtotal1 +=1
+                if grid2[i][j].colour == BLACK:
+                    BLACKtotal2 +=1
+
+        REDlist1.append(REDtotal1)
+        WHITElist1.append(WHITEtotal1)
+        GREENlist1.append(GREENtotal1)
+        BLUElist1.append(BLUEtotal1)
+        BLACKlist1.append(BLACKtotal1)
+        
+        REDlist2.append(REDtotal2)
+        WHITElist2.append(WHITEtotal2)
+        GREENlist2.append(GREENtotal2)
+        BLUElist2.append(BLUEtotal2)
+        BLACKlist2.append(BLACKtotal2)
+        
+        day += 1
+
+
+        if day > day_max:
+            run = False
+    
+    multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREENlist2,BLUElist1, BLUElist2,BLACKlist1, BLACKlist2, vax_day1, vax_day2, day_max )
 
 
 
-
-def graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max):
+def single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max):
     x = [0]
     for y in range(0,day_max):
         x.append(y)
@@ -235,7 +336,7 @@ def graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day
     fig, ax = plt.subplots()
 
     ax.plot(x, a, 'r', label = 'infected')
-    ax.plot(x, b, 'k--', label = 'succeptible')
+    ax.plot(x, b, 'k--', label = 'susceptible')
     ax.plot(x, c, 'g', label = 'recovered')
     ax.plot(x, d, 'b', label = 'vaccinated')
     ax.plot(x, e, 'k', label = 'dead')
@@ -249,7 +350,36 @@ def graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day
     plt.title('SIRVD graph')
     plt.show()  
 
-
+def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREENlist2,BLUElist1, BLUElist2,BLACKlist1, BLACKlist2, vax_day1, vax_day2, day_max ):
+    x = [0]
+    for y in range(0, day_max):
+        x.append(y)
+    
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Comparison of SIRVD Graphs')
+    axs[0].plot(x, REDlist1, 'r', label = 'infected')
+    axs[0].plot(x, WHITElist1, 'k--', label = 'susceptible')
+    axs[0].plot(x, GREENlist1, 'g', label = 'recovered')
+    axs[0].plot(x, BLUElist1, 'b', label = 'vaccinated')
+    axs[0].plot(x, BLACKlist1, 'k', label = 'dead')
+   
+    
+    axs[0].set_ylabel("No. of people")
+    
+    axs[1].plot(x, REDlist2, 'r', label = 'infected')
+    axs[1].plot(x, WHITElist2, 'k--' ,label = 'susceptible')
+    axs[1].plot(x, GREENlist2, 'g', label = 'recovered')
+    axs[1].plot(x, BLUElist2, 'b', label = 'vaccinated')
+    axs[1].plot(x, BLACKlist2, 'k', label = 'dead')
+    
+    axs[1].set_xlabel('Days')
+    axs[1].set_ylabel("No. of people")
+    
+    axs[0].legend(fontsize = 'x-small')
+    plt.show
+    
+   
+    
 
 def main():
     settings()
