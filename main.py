@@ -29,7 +29,7 @@ BLACK = (0,0,0)
 
 def settings():
     
-    q0 = input("Press 'a' if you would like to see a single simulation, or press'b' if you would like to compare multiple variations of paramaters: ")
+    q0 = input("Press 'a' if you would like to see a single simulation, or press 'b' if you would like to compare multiple variations of paramaters: ")
     
     if q0 == 'a':
         q1 = input("If you would like to use default settings: enter 'd', if you would like to use custom settings enter 'c': ")
@@ -123,7 +123,7 @@ def settings():
                         print("Error, not a correct input. Restart")
                         settings()
                 
-                elif q2 == 'n':
+                elif q3 == 'n':
                     vax_day2 = 0
                     vax_level2 = 0
                     
