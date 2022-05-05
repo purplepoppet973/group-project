@@ -147,7 +147,7 @@ def settings():
             print("Error, not a correct input. Restart")
             settings()
         
-        print("Your simulations are now running")
+        print("Your simulations are now running. Your graphs will appear when the simualtions are complete.")
         multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2)
     
     else:
@@ -155,6 +155,22 @@ def settings():
         settings()
 
 def menu_create(prob, death, day_max, vax_level, vax_day,):
+    '''
+    Creates a startup menu in the pygame window explaining controls.
+
+    Parameters
+    ----------
+    prob : The base probability of a covid spread to a new square
+    death : The probability of an infected person dying
+    day_max : The day at which the simulation ends
+    vax_level : The proprotion of sucestible people being vaccinated each day
+    vax_day : The day the vaccinations begin
+
+    Returns
+    -------
+    None.
+
+    '''
     WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
     pygame.display.set_caption('Simulation Menu')
     WINDOW.fill(WHITE)
@@ -181,19 +197,30 @@ def menu_create(prob, death, day_max, vax_level, vax_day,):
             if event.key == pygame.K_RETURN:        
                 single_sim(prob, death, day_max, vax_level, vax_day)
                 pygame.quit()
-                sys.exit()
-
-                
-                
-                
+                sys.exit()               
+                     
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
     
 
-
-
 def single_sim(prob, death, day_max, vax_level, vax_day):
+    '''
+    Runs a simulation of covid in the pygame window.
+
+    Parameters
+    ----------
+    prob : The base probability of a covid spread to a new square
+    death : The probability of an infected person dying
+    day_max : The day at which the simulation ends
+    vax_level : The proprotion of sucestible people being vaccinated each day
+    vax_day : The day the vaccinations begin
+
+    Returns
+    -------
+    None.
+
+    '''
     WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
     pygame.display.set_caption('Simulation - Press space to begin')
     day = 0
@@ -268,6 +295,26 @@ def single_sim(prob, death, day_max, vax_level, vax_day):
     single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max)
     
 def multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2):
+    '''
+    Runs two non-physical covid simulations.
+
+    Parameters
+    ----------
+    prob1 : The base probability of a covid spread to a new square in simulation 1 
+    prob2 : The base probability of a covid spread to a new square in simulation 2
+    death1 : The probability of an infected person dying in simulation 1
+    death2 : The probability of an infected person dying in simulation 2
+    day_max : The day at which the simulation ends
+    vax_level1 : The proprotion of sucestible people being vaccinated each day in simulation 1 
+    vax_level2 : The proprotion of sucestible people being vaccinated each day in simulation 2
+    vax_day1 : The day the vaccinations begin in simulation 1 
+    vax_day2 : The day the vaccinations begin in simulation 2
+
+    Returns
+    -------
+    None.
+
+    '''
    
     REDlist1, WHITElist1, GREENlist1, BLUElist1, BLACKlist1 = [],[],[],[],[]
     REDlist2, WHITElist2, GREENlist2, BLUElist2, BLACKlist2 = [],[],[],[],[]
@@ -333,23 +380,38 @@ def multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_
 
 
 def single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_day, day_max):
+    '''
+    Creates a single SIRVD graph from the single simulation data
+
+    Parameters
+    ----------
+    REDlist : The list of infected plot points
+    WHITElist : The list of susceptible plot points
+    GREENlist : The list of recovered plot points
+    BLUElist : The list of vaccinated plot points
+    BLACKlist : The list of dead plot points
+    vax_day : The day the vaccinations begin
+    day_max : The day the simulation ends
+
+    Returns
+    -------
+    None.
+
+    '''
     x = [0]
     for y in range(0,day_max):
         x.append(y)
-    a = REDlist
-    b = WHITElist 
-    c = GREENlist
-    d = BLUElist
-    e = BLACKlist
+    
+  
 
     fig, ax = plt.subplots()
 
-    ax.plot(x, a, 'r', label = 'infected')
-    ax.plot(x, b, 'k--', label = 'susceptible')
-    ax.plot(x, c, 'g', label = 'recovered')
-    ax.plot(x, d, 'b', label = 'vaccinated')
-    ax.plot(x, e, 'k', label = 'dead')
-    plt.axvline(x= vax_day, ymin=0, ymax=1, color = 'blue', linestyle=":",)
+    ax.plot(x, REDlist, 'r', label = 'infected')
+    ax.plot(x, WHITElist, 'k--', label = 'susceptible')
+    ax.plot(x, GREENlist, 'g', label = 'recovered')
+    ax.plot(x, BLUElist, 'b', label = 'vaccinated')
+    ax.plot(x, BLACKlist, 'k', label = 'dead')
+    plt.axvline(x= vax_day, ymin=0, ymax=1, color = 'blue', linestyle=":")
     
     
     leg = ax.legend()
@@ -357,9 +419,36 @@ def single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_d
     plt.ylabel('No. of people')
     plt.xlabel('Days')
     plt.title('SIRVD graph')
+    plt.grid()
     plt.show()  
 
 def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREENlist2,BLUElist1, BLUElist2,BLACKlist1, BLACKlist2, vax_day1, vax_day2, day_max ):
+    '''
+    Creates two SIRVD graphs for comparison from the multi-simulation data.
+
+    Parameters
+    ----------
+    REDlist1 : The list of infected plot points for simulation 1 
+    REDlist2 : The list of infected plot points for simulation 2 
+    WHITElist1 : The list of susceptible plot points for simulation 1
+    WHITElist2 : The list of susceptible plot points for simulation 2 
+    GREENlist1 : The list of recovered plot points for simulation 1 
+    GREENlist2 : The list of recovered plot points for simulation 2
+    BLUElist1 : The list of vaccinated plot points for simulation 1 
+    BLUElist2 : The list of vaccinated plot points for simulation 1 
+    BLACKlist1 : The list of dead plot points for simulation 1
+    BLACKlist2 : The list of dead plot points for simulation 2
+    vax_day1 : The day the vaccinations begin in simulation 1 
+    vax_day2 : The day the vaccinations begin in simulation 2
+    day_max : The day the simulation ends
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    '''
+    
     x = [0]
     for y in range(0, day_max):
         x.append(y)
@@ -371,8 +460,8 @@ def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREEN
     axs[0].plot(x, GREENlist1, 'g', label = 'recovered')
     axs[0].plot(x, BLUElist1, 'b', label = 'vaccinated')
     axs[0].plot(x, BLACKlist1, 'k', label = 'dead')
-   
-    
+    axs[0].axvline(x= vax_day1, ymin=0, ymax=1, color = 'blue', linestyle=":")
+
     axs[0].set_ylabel("No. of people")
     
     axs[1].plot(x, REDlist2, 'r', label = 'infected')
@@ -380,9 +469,11 @@ def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREEN
     axs[1].plot(x, GREENlist2, 'g', label = 'recovered')
     axs[1].plot(x, BLUElist2, 'b', label = 'vaccinated')
     axs[1].plot(x, BLACKlist2, 'k', label = 'dead')
+    axs[1].axvline(x= vax_day2, ymin=0, ymax=1, color = 'blue', linestyle=":")
     
     axs[1].set_xlabel('Days')
     axs[1].set_ylabel("No. of people")
+    
     
     axs[0].legend(fontsize = 'x-small')
     plt.show

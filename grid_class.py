@@ -35,6 +35,18 @@ class Box:
 
 
     def draw_boxes(self, WINDOW):
+        '''
+        Draws the boxes.
+
+        Parameters
+        ----------
+        WINDOW : The pyggame window
+
+        Returns
+        -------
+        None.
+
+        '''
         pygame.draw.rect(WINDOW, self.colour, (self.x, self.y, WIDTH / ROWS ,WIDTH / ROWS ))
 
 
