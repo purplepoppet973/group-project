@@ -99,7 +99,7 @@ def settings():
         if prob1 >= 0 and prob1 <= 1 and prob2 >= 0 and prob2 <= 1:
             death1 = float(input("Enter a value between 0 and 1 for the first simulation probability of death: "))
             death2 = float(input("Enter a value between 0 and 1 for the second simulation probability of death: "))
-            
+
             if death1 >= 0 and death1 <= 1 and death2 >= 0 and death2 <= 1 :  
                 day_max = int(input("Enter an integer for how many days the simulation should run: "))
         
@@ -126,15 +126,20 @@ def settings():
                 if q3 == 'y':
                     vax_day2 = int(input("At what day of the simulation do you wish for vaccinations to begin: "))
                     vax_level2 = float(input("Enter a value between 0 and 1 for the percetange of the susceptible poulation that get vaccainted each day: "))
-                
+                    
                     if vax_level2 > 1 or vax_level2 < 0:
                         print("Error, not a correct input. Restart")
                         settings()
-                
+                    
+                    else:
+                         print("Your simulations are now running. Your graphs will appear when the simualtions are complete.")
+                         multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2)
+               
                 elif q3 == 'n':
                     vax_day2 = 0
                     vax_level2 = 0
-                    
+                    print("Your simulations are now running. Your graphs will appear when the simualtions are complete.")
+                    multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2)
                 
                 else:
                     print("Error, not a correct input. Restart")
@@ -146,9 +151,7 @@ def settings():
         else:
             print("Error, not a correct input. Restart")
             settings()
-        
-        print("Your simulations are now running. Your graphs will appear when the simualtions are complete.")
-        multi_sim(prob1,prob2, death1, death2, day_max, vax_level1, vax_level2, vax_day1, vax_day2)
+       
     
     else:
         print("Error, not a correct input. Restart")
@@ -419,7 +422,6 @@ def single_graph_maker(REDlist, WHITElist, GREENlist, BLUElist, BLACKlist, vax_d
     plt.ylabel('No. of people')
     plt.xlabel('Days')
     plt.title('SIRVD graph')
-    plt.grid()
     plt.show()  
 
 def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREENlist2,BLUElist1, BLUElist2,BLACKlist1, BLACKlist2, vax_day1, vax_day2, day_max ):
@@ -460,7 +462,9 @@ def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREEN
     axs[0].plot(x, GREENlist1, 'g', label = 'recovered')
     axs[0].plot(x, BLUElist1, 'b', label = 'vaccinated')
     axs[0].plot(x, BLACKlist1, 'k', label = 'dead')
-    axs[0].axvline(x= vax_day1, ymin=0, ymax=1, color = 'blue', linestyle=":")
+    
+    if vax_day1 > 0:
+        axs[0].axvline(x= vax_day1, ymin=0, ymax=1, color = 'blue', linestyle=":")
 
     axs[0].set_ylabel("No. of people")
     
@@ -469,7 +473,9 @@ def multi_graph_maker(REDlist1, REDlist2, WHITElist1,WHITElist2,GREENlist1,GREEN
     axs[1].plot(x, GREENlist2, 'g', label = 'recovered')
     axs[1].plot(x, BLUElist2, 'b', label = 'vaccinated')
     axs[1].plot(x, BLACKlist2, 'k', label = 'dead')
-    axs[1].axvline(x= vax_day2, ymin=0, ymax=1, color = 'blue', linestyle=":")
+    
+    if vax_day2 > 0:
+        axs[1].axvline(x= vax_day2, ymin=0, ymax=1, color = 'blue', linestyle=":")
     
     axs[1].set_xlabel('Days')
     axs[1].set_ylabel("No. of people")
