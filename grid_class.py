@@ -39,6 +39,14 @@ class Box:
 
 
     def create_grid():
+        '''
+        Creates a non-physical grid of boxes.
+
+        Returns
+        -------
+        grid : The grid formed of boxes
+
+        '''
         grid = []
         box_width = WIDTH//ROWS
 
@@ -53,6 +61,19 @@ class Box:
         return grid
 
     def draw_grid_lines(WINDOW):
+        '''
+        Draws the grid lines between the boxes.
+
+        Parameters
+        ----------
+        WINDOW : The Pygame window
+
+        Returns
+        -------
+        None.
+
+        '''
+        
         box_width = WIDTH//ROWS
 
         for i in range(ROWS):
@@ -63,6 +84,19 @@ class Box:
 
 
     def draw_grid(grid, WINDOW):
+        '''
+        Calls the functions for boxes and gridlines to be drawn and updates the pygame display.
+
+        Parameters
+        ----------
+        grid : The grid formed by the boxes
+        WINDOW : The pygame window
+
+        Returns
+        -------
+        None.
+
+        '''
         for row in grid:
             for point in row:
                 point.draw_boxes(WINDOW)

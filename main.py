@@ -28,6 +28,14 @@ BLACK = (0,0,0)
 
 
 def settings():
+    '''
+    Determines from user input what simulations to run and graphs to produce.
+
+    Returns
+    -------
+    None.
+
+    '''
     
     q0 = input("Press 'a' if you would like to see a single simulation, or press 'b' if you would like to compare multiple variations of paramaters: ")
     
