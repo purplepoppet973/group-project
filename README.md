@@ -1,4 +1,4 @@
-# Disease simulation project - Daisy Rouse, Maddy Shaw, Jaco Van Eeden, Freddie Hurd-Wood
+# Disease Simulation - Daisy Rouse, Maddy Shaw, Jaco Van Eeden, Freddie Hurd-Wood
 
 This project’s main purpose is to simulate the spread of a disease in a 2d grid based population. The projects code can be used to run a simulation off of settings and produce an animation showing the spread of the disease on a grid, then producing a SIRVD graph of the spread. Secondarily the code can be used to run two simulations at the same time, without displaying them, to then produce two SIRVD graphs on the same plot so they can be compared with one another.
 
